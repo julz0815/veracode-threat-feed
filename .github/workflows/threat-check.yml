@@ -2,19 +2,6 @@ name: Threat Feed Security Check
 
 on:
   workflow_dispatch:
-    inputs:
-      phylum_api_token:
-        description: 'Phylum API Token'
-        required: true
-        type: string
-      veracode_api_id:
-        description: 'Veracode API ID'
-        required: true
-        type: string
-      veracode_api_key:
-        description: 'Veracode API Key'
-        required: true
-        type: string
   schedule:
     - cron: '0 9 * * 1' # Run every Monday at 9 AM UTC
 
@@ -29,9 +16,9 @@ jobs:
       - name: Run threat check
         uses: ./
         with:
-          phylum_api_token: ${{ inputs.phylum_api_token || secrets.PHYLUM_API_TOKEN }}
-          veracode_api_id: ${{ inputs.veracode_api_id || secrets.VERACODE_API_ID }}
-          veracode_api_key: ${{ inputs.veracode_api_key || secrets.VERACODE_API_KEY }}
+          phylum_api_token: ${{ secrets.PHYLUM_API_TOKEN }}
+          veracode_api_id: ${{ secrets.VERACODE_API_ID }}
+          veracode_api_key: ${{ secrets.VERACODE_API_KEY }}
           debug: 'true'
 
       - name: Upload security reports
