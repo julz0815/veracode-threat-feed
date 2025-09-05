@@ -19,7 +19,7 @@ jobs:
           phylum_api_token: ${{ secrets.PHYLUM_API_TOKEN }}
           veracode_api_id: ${{ secrets.VERACODE_API_ID }}
           veracode_api_key: ${{ secrets.VERACODE_API_KEY }}
-          debug: 'true'
+          debug: 'false'
 
       - name: Upload security reports
         uses: actions/upload-artifact@v4
