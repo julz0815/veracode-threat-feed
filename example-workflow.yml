@@ -1,0 +1,53 @@
+# Example workflow for using the Threat Feed Security Check Action
+# Copy this to your repository as .github/workflows/security-check.yml
+
+name: Security Check
+
+on:
+  # Run manually
+  workflow_dispatch:
+    inputs:
+      phylum_api_token:
+        description: 'Phylum API Token'
+        required: true
+        type: string
+      veracode_api_id:
+        description: 'Veracode API ID'
+        required: true
+        type: string
+      veracode_api_key:
+        description: 'Veracode API Key'
+        required: true
+        type: string
+  # Run every Monday at 9 AM UTC
+  schedule:
+    - cron: '0 9 * * 1'
+  # Run on push to main branch
+  push:
+    branches: [main]
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    name: Check for vulnerable packages
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Threat Feed Security Check
+        uses: ./
+        with:
+          phylum_api_token: ${{ inputs.phylum_api_token || secrets.PHYLUM_API_TOKEN }}
+          veracode_api_id: ${{ inputs.veracode_api_id || secrets.VERACODE_API_ID }}
+          veracode_api_key: ${{ inputs.veracode_api_key || secrets.VERACODE_API_KEY }}
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-reports
+          path: |
+            summary.txt
+            new-malicious-packages.txt
+          retention-days: 30

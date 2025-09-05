@@ -1,0 +1,58 @@
+# Azure DevOps Pipeline for Threat Feed Security Check
+# This pipeline runs the threat feed action to check for vulnerable packages
+
+trigger:
+- main
+- develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  # Set these variables in Azure DevOps > Pipelines > Library > Variable Groups
+  # or in Pipeline Variables
+  # PHYLUM_API_TOKEN: Your Phylum API token
+  # VERACODE_API_ID: Your Veracode API ID
+  # VERACODE_API_KEY: Your Veracode API Key
+
+stages:
+- stage: SecurityCheck
+  displayName: 'Threat Feed Security Check'
+  jobs:
+  - job: ThreatFeedCheck
+    displayName: 'Check for Vulnerable Packages'
+    steps:
+    - checkout: self
+      fetchDepth: 0
+    
+    - script: |
+        git clone https://github.com/your-username/threat-feed-action.git action
+        cd action
+      displayName: 'Setup Threat Feed Action'
+    
+    - script: |
+        cd action
+        node dist/index.js
+      displayName: 'Run Threat Feed Check'
+      env:
+        PHYLUM_API_TOKEN: $(PHYLUM_API_TOKEN)
+        VERACODE_API_ID: $(VERACODE_API_ID)
+        VERACODE_API_KEY: $(VERACODE_API_KEY)
+        DEBUG: 'true'
+    
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Security Reports'
+      inputs:
+        pathToPublish: 'action'
+        artifactName: 'security-reports'
+        publishLocation: 'Container'
+      condition: always()
+    
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results'
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'action/summary.txt'
+        mergeTestResults: true
+        failTaskOnFailedTests: true
+      condition: always()

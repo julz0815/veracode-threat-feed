@@ -1,0 +1,14 @@
+MALICIOUS PACKAGES FROM THREAT FEED
+=====================================
+
+Generated: 2024-01-15T10:30:00.000Z
+Total packages in threat feed: 3
+
+| Date Added | Ecosystem | Package Name        | Package Version |
+|------------|-----------|---------------------|-----------------|
+| 2024-01-15 | npm       | malicious-package-1 | 1.0.0           |
+| 2024-01-14 | PyPI      | suspicious-library  | 2.1.0           |
+| 2024-01-13 | npm       | fake-utility        | 0.9.5           |
+
+Note: This table contains all packages from the Phylum threat feed.
+Packages that match your project libraries are highlighted in the summary.txt file.

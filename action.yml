@@ -1,0 +1,25 @@
+name: 'Threat Feed Security Check'
+description: 'Check for vulnerable packages using Phylum threat feed and Veracode SCA'
+author: 'Threat Feed Action'
+branding:
+  icon: 'shield'
+  color: 'red'
+
+inputs:
+  phylum_api_token:
+    description: 'Phylum API Token'
+    required: true
+  veracode_api_id:
+    description: 'Veracode API ID'
+    required: true
+  veracode_api_key:
+    description: 'Veracode API Key'
+    required: true
+  debug:
+    description: 'Enable debug logging'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
