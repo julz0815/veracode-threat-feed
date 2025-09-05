@@ -6,19 +6,6 @@ name: Security Check
 on:
   # Run manually
   workflow_dispatch:
-    inputs:
-      phylum_api_token:
-        description: 'Phylum API Token'
-        required: true
-        type: string
-      veracode_api_id:
-        description: 'Veracode API ID'
-        required: true
-        type: string
-      veracode_api_key:
-        description: 'Veracode API Key'
-        required: true
-        type: string
   # Run every Monday at 9 AM UTC
   schedule:
     - cron: '0 9 * * 1'
@@ -38,9 +25,9 @@ jobs:
       - name: Run Threat Feed Security Check
         uses: ./
         with:
-          phylum_api_token: ${{ inputs.phylum_api_token || secrets.PHYLUM_API_TOKEN }}
-          veracode_api_id: ${{ inputs.veracode_api_id || secrets.VERACODE_API_ID }}
-          veracode_api_key: ${{ inputs.veracode_api_key || secrets.VERACODE_API_KEY }}
+          phylum_api_token: ${{ secrets.PHYLUM_API_TOKEN }}
+          veracode_api_id: ${{ secrets.VERACODE_API_ID }}
+          veracode_api_key: ${{ secrets.VERACODE_API_KEY }}
 
       - name: Upload security reports
         uses: actions/upload-artifact@v4
